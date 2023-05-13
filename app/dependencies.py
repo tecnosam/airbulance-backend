@@ -1,6 +1,6 @@
 from fastapi import Header, HTTPException, Depends
 
-from app.security import decode_jwt_token
+from app.utils.security import decode_jwt_token
 
 import jwt.exceptions
 
