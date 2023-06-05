@@ -134,6 +134,8 @@ def reset_password(user_id, otp, password):
 
         if is_verified and is_not_expired:
 
+            db.otp.delete_one({"_id": otp_object["_id"]})
+
             return update_user(user_id, {"password": password})
 
         if not is_not_expired:
@@ -162,11 +164,12 @@ def send_otp(email):
         otp = generate_otp()
         hashed_otp = hash_otp(otp)
 
-        db.otp.insert_one({
+        db.otp.update_one({
             "user_id": user_id,
             "otp": hashed_otp,
-            "expires_at": time.time() + 300  # 5 minute
-        })
+            "expires_at": time.time() + 300,  # 5 minute
+
+        }, upsert=True)
 
         return {
             "message": "Sent OTP",
