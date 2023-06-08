@@ -164,12 +164,16 @@ def send_otp(email):
         otp = generate_otp()
         hashed_otp = hash_otp(otp)
 
-        db.otp.update_one({
-            "user_id": user_id,
-            "otp": hashed_otp,
-            "expires_at": time.time() + 300,  # 5 minute
-
-        }, upsert=True)
+        db.otp.update_one(
+            {
+                "user_id": user_id
+            },
+            {
+                "otp": hashed_otp,
+                "expires_at": time.time() + 300,  # 5 minute
+            },
+            upsert=True
+        )
 
         return {
             "message": "Sent OTP",
