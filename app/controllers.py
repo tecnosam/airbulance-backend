@@ -169,8 +169,10 @@ def send_otp(email):
                 "user_id": user_id
             },
             {
-                "otp": hashed_otp,
-                "expires_at": time.time() + 300,  # 5 minute
+                "$set" {
+                    "otp": hashed_otp,
+                    "expires_at": time.time() + 300,  # 5 minute
+                }
             },
             upsert=True
         )
